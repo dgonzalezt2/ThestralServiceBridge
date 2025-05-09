@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using ThestralServiceBridge.Domain.Transfer;
 using ThestralServiceBridge.Domain.Transfer.Dtos;
+using ThestralServiceBridge.Domain.User;
 using ThestralServiceBridge.Infrastructure.MessageBroker;
 using ThestralServiceBridge.Infrastructure.MessageBroker.Options;
 
@@ -18,18 +19,27 @@ public class TransferController(IMessagePublisher messagePublisher, IOptions<Pub
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> TransferRequest([FromBody] TransferDto transferRequestDto,
+        [FromHeader(Name = "X-Apigateway-Api-Userinfo")] string userInfoHeader,
         [FromHeader(Name = "X-User-Id")] string userId)
     {
-        /*
         if (string.IsNullOrEmpty(userInfoHeader))
         {
-            return BadRequest("User Id not found");
+            return BadRequest("User Info not found");
         }
-         */
+        var userInfo = UserInfoAuthDto.DecodeUserInfoAuth(userInfoHeader);
+        if (userInfo == null || string.IsNullOrEmpty(userInfo.Email))
+        {
+            return BadRequest("Invalid user info");
+        }
         if (string.IsNullOrEmpty(userId)) return BadRequest("User Id not found");
         if (!uint.TryParse(userId, out _)) return BadRequest("User Id not valid");
         var headers = new Headers(nameof(EventTypes.TRANSFER_USER), userId);
-        await messagePublisher.SendMessageAsync(transferRequestDto, _exchangeOptions.UserTransferRequestQueue,
+        var transferEvent = new TransferEventDto
+        {
+            UserEmail = userInfo.Email,
+            ExternalOperatorId = transferRequestDto.ExternalOperatorId
+        };
+        await messagePublisher.SendMessageAsync(transferEvent, _exchangeOptions.UserTransferRequestQueue,
             headers.GetAttributesAsDictionary());
 
         return Ok();

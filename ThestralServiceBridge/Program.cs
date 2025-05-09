@@ -3,13 +3,14 @@ using RabbitMQ.Client;
 using Scalar.AspNetCore;
 using ThestralServiceBridge.Infrastructure.Configuration;
 using ThestralServiceBridge.Infrastructure.MessageBroker.Options;
+using ThestralServiceBridge.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Configuration.AddEnvironmentVariables();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -42,6 +43,8 @@ app.UseCors(corsPolicyBuilder =>
         .WithExposedHeaders("X-Pagination-Has-Next-Page")
         .WithExposedHeaders("X-Pagination-Total-Pages");
 });
+
+app.UseMiddleware<MessageSendingExceptionHandler>();
 
 app.UseHttpsRedirection();
 
