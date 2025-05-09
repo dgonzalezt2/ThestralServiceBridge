@@ -17,20 +17,18 @@ builder.Services.AddInfrastructure(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.MapOpenApi();
+app.MapScalarApiReference(options =>
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference(options =>
-    {
-        options.Servers = [];
-        options.WithTitle("ThestralBridge API")
-            .WithFavicon("/favicon.ico")
-            .WithTheme(ScalarTheme.DeepSpace)
-            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)
-            .WithSidebar(true);
-    });
-    app.UseStaticFiles();
-}
+    options.Servers = [];
+    options.WithTitle("ThestralBridge API")
+        .WithFavicon("/favicon.ico")
+        .WithTheme(ScalarTheme.DeepSpace)
+        .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)
+        .WithSidebar(true);
+});
+app.UseStaticFiles();
+
 
 app.UseCors(corsPolicyBuilder =>
 {
