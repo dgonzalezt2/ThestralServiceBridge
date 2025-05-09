@@ -1,0 +1,6 @@
+@ThestralServiceBridge_HostAddress = http://localhost:5188
+
+GET {{ThestralServiceBridge_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

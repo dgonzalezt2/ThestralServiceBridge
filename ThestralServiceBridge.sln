@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThestralServiceBridge", "ThestralServiceBridge\ThestralServiceBridge.csproj", "{6E6CC7C0-84F4-4A0D-9BBC-E50381577D0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThestralServiceBridge.Infrastructure", "ThestralServiceBridge.Infrastructure\ThestralServiceBridge.Infrastructure.csproj", "{EBD8AAE3-4D24-4A81-9F9A-E136D20CEAF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThestralServiceBridge.Domain", "ThestralServiceBridge.Domain\ThestralServiceBridge.Domain.csproj", "{482DC86E-E094-4AE6-9DB3-49EFE510B4D9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E6CC7C0-84F4-4A0D-9BBC-E50381577D0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E6CC7C0-84F4-4A0D-9BBC-E50381577D0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E6CC7C0-84F4-4A0D-9BBC-E50381577D0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E6CC7C0-84F4-4A0D-9BBC-E50381577D0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBD8AAE3-4D24-4A81-9F9A-E136D20CEAF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBD8AAE3-4D24-4A81-9F9A-E136D20CEAF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBD8AAE3-4D24-4A81-9F9A-E136D20CEAF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBD8AAE3-4D24-4A81-9F9A-E136D20CEAF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{482DC86E-E094-4AE6-9DB3-49EFE510B4D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{482DC86E-E094-4AE6-9DB3-49EFE510B4D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{482DC86E-E094-4AE6-9DB3-49EFE510B4D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{482DC86E-E094-4AE6-9DB3-49EFE510B4D9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
