@@ -19,8 +19,7 @@ public class TransferController(IMessagePublisher messagePublisher, IOptions<Pub
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> TransferRequest([FromBody] TransferDto transferRequestDto,
-        [FromHeader(Name = "X-Apigateway-Api-Userinfo")] string userInfoHeader,
-        [FromHeader(Name = "X-User-Id")] string userId)
+        [FromHeader(Name = "X-Apigateway-Api-Userinfo")] string userInfoHeader)
     {
         if (string.IsNullOrEmpty(userInfoHeader))
         {
@@ -31,6 +30,7 @@ public class TransferController(IMessagePublisher messagePublisher, IOptions<Pub
         {
             return BadRequest("Invalid user info");
         }
+        var userId = userInfo.UserId;
         if (string.IsNullOrEmpty(userId)) return BadRequest("User Id not found");
         if (!uint.TryParse(userId, out _)) return BadRequest("User Id not valid");
         var headers = new Headers(nameof(EventTypes.TRANSFER_USER), userId);
