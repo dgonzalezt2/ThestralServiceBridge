@@ -50,16 +50,22 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    var connectionFactory = scope.ServiceProvider.GetRequiredService<ConnectionFactory>();
-    await using var connection = await connectionFactory.CreateConnectionAsync();
-    await using var channel = await connection.CreateChannelAsync();
-    var queues = scope.ServiceProvider.GetRequiredService<IOptions<PublisherConfiguration>>().Value;
-    var userTransferNotificationQueue = queues.UserTransferRequestQueue;
-    await channel.QueueDeclareAsync(queue: userTransferNotificationQueue,
-        durable: true,
-        exclusive: false,
-        autoDelete: false,
-        arguments: null);
+    try
+    {
+        var connectionFactory = scope.ServiceProvider.GetRequiredService<ConnectionFactory>();
+        await using var connection = await connectionFactory.CreateConnectionAsync();
+        await using var channel = await connection.CreateChannelAsync();
+        var queues = scope.ServiceProvider.GetRequiredService<IOptions<PublisherConfiguration>>().Value;
+        var userTransferNotificationQueue = queues.UserTransferRequestQueue;
+        await channel.QueueDeclareAsync(queue: userTransferNotificationQueue,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null);
+    }
+    catch
+    {
+    }
 }
 
 app.Run();
