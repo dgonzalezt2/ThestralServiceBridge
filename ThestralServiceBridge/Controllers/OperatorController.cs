@@ -5,7 +5,7 @@ using ThestralServiceBridge.Infrastructure.GovCarpeta;
 namespace ThestralServiceBridge.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class OperatorController(IGetOperatorProcess getOperatorProcess) : ControllerBase
 {
     [HttpGet("{operatorId}")]

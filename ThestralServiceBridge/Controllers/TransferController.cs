@@ -2,14 +2,13 @@
 using Microsoft.Extensions.Options;
 using ThestralServiceBridge.Domain.Transfer;
 using ThestralServiceBridge.Domain.Transfer.Dtos;
-using ThestralServiceBridge.Domain.User;
 using ThestralServiceBridge.Infrastructure.MessageBroker;
 using ThestralServiceBridge.Infrastructure.MessageBroker.Options;
 
 namespace ThestralServiceBridge.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class TransferController(IMessagePublisher messagePublisher, IOptions<PublisherConfiguration> exchangeOptions)
     : ControllerBase
 {
@@ -19,24 +18,15 @@ public class TransferController(IMessagePublisher messagePublisher, IOptions<Pub
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> TransferRequest([FromBody] TransferDto transferRequestDto,
-        [FromHeader(Name = "X-Apigateway-Api-Userinfo")] string userInfoHeader)
+        [FromHeader(Name = "X-User-Email")] string userEmail, [FromHeader(Name = "X-User-Id")] string userId)
     {
-        if (string.IsNullOrEmpty(userInfoHeader))
-        {
-            return BadRequest("User Info not found");
-        }
-        var userInfo = UserInfoAuthDto.DecodeUserInfoAuth(userInfoHeader);
-        if (userInfo == null || string.IsNullOrEmpty(userInfo.Email))
-        {
-            return BadRequest("Invalid user info");
-        }
-        var userId = userInfo.UserId;
+        if (string.IsNullOrEmpty(userEmail)) return BadRequest("User Email not found");
         if (string.IsNullOrEmpty(userId)) return BadRequest("User Id not found");
         if (!uint.TryParse(userId, out _)) return BadRequest("User Id not valid");
         var headers = new Headers(nameof(EventTypes.TRANSFER_USER), userId);
         var transferEvent = new TransferEventDto
         {
-            UserEmail = userInfo.Email,
+            UserEmail = userEmail,
             ExternalOperatorId = transferRequestDto.ExternalOperatorId
         };
         await messagePublisher.SendMessageAsync(transferEvent, _exchangeOptions.UserTransferRequestQueue,
